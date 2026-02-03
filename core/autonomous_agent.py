@@ -1,6 +1,5 @@
 import asyncio
 import time
-from core.brain_memory import BrainMemory
 
 class AutonomousDaemon:
     def __init__(self, executor, memory, telegram_app):
@@ -25,16 +24,24 @@ class AutonomousDaemon:
                     type('Step', (), {
                         "action": "run_web_audit", 
                         "parameters": {"url": "https://tirosh.co.il"}, 
-                        "description": "Running Performance Audit"
+                        "description": "בדיקת ביצועים אוטונומית"
                     }),
                     type('Step', (), {
                         "action": "deploy_site", 
                         "parameters": {"commit_message": f"Guardian Auto-Improvement: {question}"}, 
-                        "description": "Deploying improvements to GitHub"
+                        "description": "עדכון גרסה בענן"
                     })
                 ]
                 
-                res = self.executor.execute_plan(plan)
-                self.memory.record_learning(question, "Performance Audit & Deploy", "Success")
+                try:
+                    # ביצוע התוכנית
+                    res = self.executor.execute_plan(plan)
+                    
+                    # שמירת התובנה בזיכרון הקיים (SQLite)
+                    insight_data = f"Action: Performance Audit & Deploy | Result: Success"
+                    self.memory.store_insight(question, insight_data)
+                    
+                except Exception as e:
+                    print(f"❌ Error in autonomous step: {e}")
                 
-                await asyncio.sleep(1800)
+                await asyncio.sleep(1800) # סבב כל 30 דקות
