@@ -1,0 +1,10 @@
+llm:
+  deepseek:
+    api_key: "sk-d0bf54f04cf8442eba22155286deb605"
+    base_url: "https://api.deepseek.com"
+  ollama:
+    base_url: "http://127.0.0.1:11434"
+    model: "deepseek-r1:8b"
+
+system:
+  downloads_folder: "~/Downloads"
